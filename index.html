@@ -1,26 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixabay Image Search</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixabay Image Search with SimpleLightbox</title>
+  
+  <!-- iziToast CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css" />
+  
+  <!-- SimpleLightbox CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.1/simple-lightbox.min.css" />
+  
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    form { margin-bottom: 20px; }
-    input { padding: 8px; width: 250px; }
-    button { padding: 8px 12px; }
-    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-    .photo-card { border: 1px solid #ccc; padding: 10px; }
-    .photo-card img { width: 100%; height: auto; display: block; }
+    form {
+      margin-bottom: 40px;
+    }
+
+    ul.gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    .photo-card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid #eee;
+    }
+
+    .info {
+      padding: 10px 12px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .info p {
+      margin: 4px 0;
+      font-weight: normal;
+    }
+
+    .info p b {
+      font-weight: 600;
+    }
+
+    /* css-loader styles for spinner */
+    #loader {
+      --loader-size: 40px;
+      margin: 24px auto;
+      width: var(--loader-size);
+      height: var(--loader-size);
+      border-radius: 50%;
+      border: 4px solid transparent;
+      border-top-color: #5e81ac;
+      animation: css-loader-spin 1s linear infinite;
+      display: none;
+    }
+
+    @keyframes css-loader-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
   <script type="module" crossorigin src="/vanilla-app-template/index.js"></script>
-  <link rel="modulepreload" crossorigin href="/vanilla-app-template/assets/vendor-CLAAen6O.js">
 </head>
 <body>
   <form id="search-form">
-    <input type="text" id="search-query" placeholder="Search images..." required>
+    <input type="text" id="search-query" placeholder="Search images..." required />
     <button type="submit">Search</button>
   </form>
-  <div class="gallery" id="gallery"></div>
+
+  <div id="loader"></div>
+
+  <ul class="gallery" id="gallery"></ul>
+
+  <!-- SimpleLightbox JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.1/simple-lightbox.min.js"></script>
+   
+  <!-- iziToast JS -->
+  <script src="https://cdn.jsdelivr.net/npm/izitoast/dist/js/iziToast.min.js"></script>
+   
 </body>
 </html>
