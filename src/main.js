@@ -28,7 +28,7 @@ form.addEventListener('submit', async (e) => {
   }
 
   renderImages(images, gallery);
-
+  
   if (lightbox) {
     lightbox.destroy();
   }
