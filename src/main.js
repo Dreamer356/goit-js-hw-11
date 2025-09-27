@@ -9,6 +9,7 @@ const loader = document.querySelector('.loader');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+
   const query = document.getElementById('search-query').value.trim();
   if (!query) return;
 
@@ -23,6 +24,7 @@ form.addEventListener('submit', async (e) => {
         message: 'Sorry, there are no images matching your search query. Please try again!',
         position: 'topRight'
       });
+
       if (lightbox) {
         lightbox.destroy();
         lightbox = null;
