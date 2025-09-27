@@ -18,14 +18,10 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
-  // Показываем лоадер сразу
   showLoader();
 
-  // Даем браузеру возможность отрендерить лоадер
-  // Надежный способ — дождаться двух requestAnimationFrame:
   await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
-  // После того как лоадер показан — очищаем галерею и делаем запрос
   clearGallery(gallery);
 
   try {
