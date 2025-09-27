@@ -18,13 +18,20 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
-  clearGallery(gallery);
+  // Показываем лоадер сразу
   showLoader();
+
+  // Даем браузеру возможность отрендерить лоадер
+  // Надежный способ — дождаться двух requestAnimationFrame:
+  await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+  // После того как лоадер показан — очищаем галерею и делаем запрос
+  clearGallery(gallery);
 
   try {
     const images = await fetchImages(searchQuery);
 
-    if (images.length === 0) {
+    if (!images || images.length === 0) {
       iziToast.error({
         title: "Error",
         message: "Sorry, there are no images matching your search query. Please try again!",
