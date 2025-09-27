@@ -1,55 +1,47 @@
-import { fetchImages } from './js/pixabay-api.js';
-import { renderImages, showLoader, hideLoader, clearGallery } from './js/render-functions.js';
+import { fetchImages } from "./js/pixabay-api.js";
+import { renderGallery, clearGallery, showLoader, hideLoader } from "./js/render-functions.js";
 
-let lightbox;
+const form = document.querySelector(".form");
+const gallery = document.querySelector(".gallery");
 
-const form = document.querySelector('.form');
-const gallery = document.querySelector('.gallery');
-const loader = document.querySelector('.loader');
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+  const searchQuery = form.elements["search-text"].value.trim();
 
-  const query = document.getElementById('search-query').value.trim();
-  if (!query) return;
+  if (!searchQuery) {
+    iziToast.warning({
+      title: "Warning",
+      message: "Please enter a search term!",
+      position: "topRight",
+    });
+    return;
+  }
 
-  showLoader(loader);
   clearGallery(gallery);
+  showLoader();
 
   try {
-    const images = await fetchImages(query);
+    const images = await fetchImages(searchQuery);
 
     if (images.length === 0) {
       iziToast.error({
-        message: 'Sorry, there are no images matching your search query. Please try again!',
-        position: 'topRight'
+        title: "Error",
+        message: "Sorry, there are no images matching your search query. Please try again!",
+        position: "topRight",
       });
-
-      if (lightbox) {
-        lightbox.destroy();
-        lightbox = null;
-      }
       return;
     }
 
-    renderImages(images, gallery);
-
-    if (lightbox) {
-      lightbox.destroy();
-    }
-
-    lightbox = new SimpleLightbox('.gallery a.gallery-link', {
-      captions: true,
-      captionsData: 'alt',
-      captionDelay: 250,
-    });
+    renderGallery(images, gallery, true);
   } catch (error) {
-    console.error(error);
     iziToast.error({
-      message: 'Something went wrong. Please try again!',
-      position: 'topRight'
+      title: "Error",
+      message: "Sorry, something went wrong. Please try again later.",
+      position: "topRight",
     });
+    console.error(error);
   } finally {
-    hideLoader(loader);
+    hideLoader();
   }
 });

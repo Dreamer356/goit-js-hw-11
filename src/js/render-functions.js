@@ -1,27 +1,51 @@
-export function renderImages(images, container) {
-  container.innerHTML = images.map(img => `
-    <li class="photo-card">
-      <a href="${img.largeImageURL}" class="gallery-link">
-        <img src="${img.webformatURL}" alt="${img.tags}" loading="lazy" />
-      </a>
-      <div class="info">
-        <p>Likes: <b>${img.likes}</b></p>
-        <p>Views: <b>${img.views}</b></p>
-        <p>Comments: <b>${img.comments}</b></p>
-        <p>Downloads: <b>${img.downloads}</b></p>
-      </div>
-    </li>
-  `).join('');
+import SimpleLightbox from "simplelightbox";
+
+let lightbox;
+const loader = document.querySelector(".loader");
+
+export function clearGallery(gallery) {
+  gallery.innerHTML = "";
 }
 
-export function clearGallery(container) {
-  container.innerHTML = '';
+export function showLoader() {
+  loader.classList.remove("loader-hidden");
 }
 
-export function showLoader(loader) {
-  loader.style.display = 'block';
+export function hideLoader() {
+  loader.classList.add("loader-hidden");
 }
 
-export function hideLoader(loader) {
-  loader.style.display = 'none';
+export function renderGallery(images, gallery, replace = true) {
+  const markup = images
+    .map(
+      (hit) => `
+      <li class="gallery-item">
+        <a href="${hit.largeImageURL}">
+          <img src="${hit.webformatURL}" alt="${hit.tags.replace(/"/g, "&quot;")}" width="300" loading="lazy" />
+        </a>
+        <div class="info">
+          <p><b>Likes:</b> ${hit.likes}</p>
+          <p><b>Views:</b> ${hit.views}</p>
+          <p><b>Comments:</b> ${hit.comments}</p>
+          <p><b>Downloads:</b> ${hit.downloads}</p>
+        </div>
+      </li>
+    `
+    )
+    .join("");
+
+  if (replace) {
+    gallery.innerHTML = markup;
+  } else {
+    gallery.insertAdjacentHTML("beforeend", markup);
+  }
+
+  if (lightbox) {
+    lightbox.refresh();
+  } else {
+    lightbox = new SimpleLightbox(".gallery a", {
+      captionsData: "alt",
+      captionDelay: 250,
+    });
+  }
 }
